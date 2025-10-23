@@ -3,13 +3,13 @@ provider "aws" {
 }
 module "oidc_provider" {
 
-source = "git@github.com/AshladBP/devops-lab/td5/scripts/tofu/modules/github-aws-oidc?ref=opentofu-tests"
+source = "https://github.com/AshladBP/devops-lab.git//td5/scripts/tofu/modules/github-aws-oidc?ref=opentofu-tests"
 
 provider_url = "https://token.actions.githubusercontent.com"
 }
 
 module "iam_roles" {
-    source = "git@github.com/AshladBP/devops-base/td5/scripts/tofu/modules/gh-actions-iam-roles?ref=opentofu-tests"
+    source = "https://github.com/AshladBP/devops-lab.git//td5/scripts/tofu/modules/gh-actions-iam-roles?ref=opentofu-tests"
 
     name = "lambda-sample"
     oidc_provider_arn = module.oidc_provider.oidc_provider_arn
