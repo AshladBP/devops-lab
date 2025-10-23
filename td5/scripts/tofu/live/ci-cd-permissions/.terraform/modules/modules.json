@@ -1,1 +1,1 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."}]}
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"iam_roles","Source":"git::https://github.com/AshladBP/devops-lab.git//td5/scripts/tofu/modules/gh-actions-iam-roles?ref=opentofu-tests","Dir":".terraform/modules/iam_roles/td5/scripts/tofu/modules/gh-actions-iam-roles"},{"Key":"oidc_provider","Source":"git::https://github.com/AshladBP/devops-lab.git//td5/scripts/tofu/modules/github-aws-oidc?ref=opentofu-tests","Dir":".terraform/modules/oidc_provider/td5/scripts/tofu/modules/github-aws-oidc"}]}
