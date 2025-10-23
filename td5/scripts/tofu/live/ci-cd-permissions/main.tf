@@ -3,7 +3,7 @@ provider "aws" {
 }
 module "oidc_provider" {
 
-source = "github.com/AshladBP/devops-lab/td5/scripts/tofu/modules/github-aws-oidc"
+source = "git@github.com/AshladBP/devops-lab/td5/scripts/tofu/modules/github-aws-oidc?ref=opentofu-tests"
 
 provider_url = "https://token.actions.githubusercontent.com"
 }
