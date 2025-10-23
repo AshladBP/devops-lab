@@ -16,10 +16,9 @@ module "iam_roles" {
     enable_iam_role_for_testing = true
     enable_iam_role_for_plan = true # Add for plan role
     enable_iam_role_for_apply = true # Add for apply role
-    lambda_actions = ["lambda:*", "apigateway:*"]
     # TODO: Replace with your own GitHub repo name!
 
-    github_repo = "AshladBP/devops-base" # ex: "bta-devops/cloud-native-devops-kubernetes-2e"
+    github_repo = "AshladBP/devops-lab" # ex: "bta-devops/cloud-native-devops-kubernetes-2e"
 
     lambda_base_name = "lambda-sample"
     tofu_state_bucket = "YOUR_S3_BUCKET_NAME" # Replace with your bucket name
