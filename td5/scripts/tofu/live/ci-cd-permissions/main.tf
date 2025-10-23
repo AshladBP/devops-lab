@@ -9,7 +9,7 @@ provider_url = "https://token.actions.githubusercontent.com"
 }
 
 module "iam_roles" {
-    source = "github.com/AshladBP/devops-base/td5/scripts/tofu/modules/gh-actions-iam-roles?ref=opentofu-tests"
+    source = "git@github.com/AshladBP/devops-base/td5/scripts/tofu/modules/gh-actions-iam-roles?ref=opentofu-tests"
 
     name = "lambda-sample"
     oidc_provider_arn = module.oidc_provider.oidc_provider_arn
