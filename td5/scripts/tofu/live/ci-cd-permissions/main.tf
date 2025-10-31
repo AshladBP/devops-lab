@@ -21,6 +21,6 @@ module "iam_roles" {
     github_repo = "AshladBP/devops-lab" # ex: "bta-devops/cloud-native-devops-kubernetes-2e"
 
     lambda_base_name = "lambda-sample"
-    tofu_state_bucket = "YOUR_S3_BUCKET_NAME" # Replace with your bucket name
-    tofu_state_dynamodb_table = "YOUR_DYNAMODB_TABLE_NAME" # Replace with your table name
+    tofu_state_bucket = "unique-devops-bucket-name" # Replace with your bucket name
+    tofu_state_dynamodb_table = "unique-devops-bucket-name" # Replace with your table name
 }
