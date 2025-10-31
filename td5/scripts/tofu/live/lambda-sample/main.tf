@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "function" {
-  source = "github.com/brikis98/devops-book//ch3/tofu/modules/lambda"
+  source = "github.com/AshladBP/devops-lab.git//td5/scripts/tofu/modules/lambda?ref=opentofu-tests"
 
   name = var.name      
 
@@ -20,7 +20,7 @@ module "function" {
 }
 
 module "gateway" {
-  source = "github.com/brikis98/devops-book//ch3/tofu/modules/api-gateway?ref=5d56963e698592b7593a877831e0450c62d1191a"
+  source = "github.com/AshladBP/devops-lab.git//td5/scripts/tofu/modules/api-gateway?ref=opentofu-tests"
 
   name               = var.name            
   function_arn       = module.function.function_arn 
