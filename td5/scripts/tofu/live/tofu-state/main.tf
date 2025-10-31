@@ -4,5 +4,5 @@ provider "aws" {
 
 module "state" {
     source = "github.com/AshladBP/devops-lab//td5/scripts/tofu/modules/state-bucket"
-    name = "UNIQUE-DEVOPS-BUCKET" # Replace with a unique name
+    name = "unique-devops-bucket-name" # Replace with a unique name
 }
