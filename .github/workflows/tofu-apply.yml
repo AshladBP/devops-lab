@@ -1,7 +1,7 @@
 name: Tofu Apply
 on:
   push:                                                                      
-    branches: ["main"]
+    branches: ["master"]
     paths: ["td5/scripts/tofu/live/lambda-sample/**"]
 jobs:
   apply:
