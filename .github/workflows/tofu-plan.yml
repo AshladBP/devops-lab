@@ -2,7 +2,7 @@ name: Tofu Plan
 
 on:
   pull_request:                                                             
-    branches: ["main"]
+    branches: ["master"]
     paths: ["td5/scripts/tofu/live/lambda-sample/**"]
 
 jobs:
