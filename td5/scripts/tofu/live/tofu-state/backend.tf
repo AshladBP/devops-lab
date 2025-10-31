@@ -4,6 +4,6 @@ terraform {
         key = "td5/scripts/tofu/live/tofu-state"
         region = "us-east-2" # Your AWS region
         encrypt = true
-        dynamodb_table = "unique-devops-dynamodb-table" # Replace
+        dynamodb_table = "unique-devops-bucket-name-table" # Replace
     }
 }
