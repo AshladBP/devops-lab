@@ -16,7 +16,7 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v3
         with:
-          # TODO: fill in your IAM role ARN!
+          # TODO: fill in your IAM role ARN!ee
           role-to-assume: arn:aws:iam::758280077036:role/lambda-sample-apply
           role-session-name: apply-${{ github.run_number }}-${{ github.actor }}
           aws-region: us-east-2
