@@ -1,0 +1,75 @@
+name: OpenTofu Plan & Apply
+
+on:
+  pull_request:
+    branches: ["master"]
+  push:
+    branches: ["master"]
+
+jobs:
+  detect_changes:
+    name: Detect Changed Folders
+    runs-on: ubuntu-latest
+    outputs:
+      folders: ${{ steps.set-folders.outputs.folders }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Detect changed files
+        id: detect
+        uses: tj-actions/changed-files@v34
+        with:
+          fetch-depth: 2
+
+      - name: Extract changed OpenTofu folders
+        id: set-folders
+        run: |
+          FOLDERS=$(echo "${{ steps.detect.outputs.all_changed_files }}" \
+            | tr ' ' '\n' \
+            | grep '^td5/scripts/tofu/live/' \
+            | awk -F/ '{print $1"/"$2"/"$3"/"$4}' \
+            | sort -u \
+            | tr '\n' ',' \
+            | sed 's/,$//')
+          echo "folders=[\"$(echo $FOLDERS | sed 's/,/","/g')\"]" >> $GITHUB_OUTPUT
+
+  run_tofu:
+    name: Run Tofu Plan & Apply
+    needs: detect_changes
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        folder: ${{ fromJson(needs.detect_changes.outputs.folders) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials for Plan
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ secrets.PLAN_ROLE_ARN }}
+          role-session-name: plan-${{ github.run_number }}-${{ github.actor }}
+          aws-region: us-east-2
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+
+      - name: Tofu Plan
+        working-directory: ${{ matrix.folder }}
+        run: |
+          tofu init -no-color -input=false
+          tofu plan -no-color -input=false -lock=false
+
+      - name: Configure AWS credentials for Apply
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ secrets.APPLY_ROLE_ARN }}
+          role-session-name: apply-${{ github.run_number }}-${{ github.actor }}
+          aws-region: us-east-2
+
+      - name: Tofu Apply
+        working-directory: ${{ matrix.folder }}
+        run: |
+          tofu init -no-color -input=false
+          tofu apply -no-color -input=false -lock-timeout=60m -auto-approve
