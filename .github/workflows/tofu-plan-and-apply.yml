@@ -25,16 +25,24 @@ jobs:
       - name: Extract changed OpenTofu folders
         id: set-folders
         run: |
-          FOLDERS=""
+          run: |
+          declare -A FOLDER
           for file in ${{ steps.detect.outputs.all_changed_files }}; do
             DIR=$(dirname "$file")
-            if ls "$DIR"/*.tf 1> /dev/null 2>&1; then
-              FOLDERS="$FOLDERS,$DIR"
-            fi
+            FOUND=false
+            while [ "$DIR" != "." ] && [ "$DIR" != "/" ]; do
+              if ls "$DIR"/*.tf 1> /dev/null 2>&1; then
+                FOLDER["$DIR"]=1
+                FOUND=true
+                break
+              fi
+              DIR=$(dirname "$DIR")
+            done
           done
-          FOLDERS=${FOLDERS#,}
-          JSON_FOLDERS="[\"$(echo $FOLDERS | sed 's/,/","/g')\"]"
-          echo "folders=$JSON_FOLDERS" >> $GITHUB_OUTPUT
+
+          FOLDERS_JSON="[\"$(echo "${!FOLDER[@]}" | tr ' ' '","')\"]"
+          echo "folders=$FOLDERS_JSON" >> $GITHUB_OUTPUT
+          echo "Detected folders: $FOLDERS_JSON"
 
   run_tofu:
     name: Run Tofu Plan & Apply
