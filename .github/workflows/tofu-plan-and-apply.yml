@@ -38,6 +38,10 @@ jobs:
     name: Run Tofu Plan & Apply
     needs: detect_changes
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write                                                  
+      id-token: write
+      contents: read
     strategy:
       matrix:
         folder: ${{ fromJson(needs.detect_changes.outputs.folders) }}
