@@ -5,7 +5,7 @@ provider "aws" {
 module "function" {
   source = "github.com/AshladBP/devops-lab.git//td5/scripts/tofu/modules/lambda"
 
-  name = var.name      
+  name = local.name_with_workspace      
 
   src_dir = "${path.module}/src" 
   runtime = "nodejs20.x"         
@@ -23,7 +23,7 @@ module "function" {
 module "gateway" {
   source = "github.com/AshladBP/devops-lab.git//td5/scripts/tofu/modules/api-gateway"
 
-  name               = var.name            
+  name               = local.name_with_workspace            
   function_arn       = module.function.function_arn 
   api_gateway_routes = ["GET /"]                    
 }
