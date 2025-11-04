@@ -25,7 +25,6 @@ jobs:
       - name: Extract changed OpenTofu folders
         id: set-folders
         run: |
-          run: |
           declare -A FOLDER
           for file in ${{ steps.detect.outputs.all_changed_files }}; do
             DIR=$(dirname "$file")
