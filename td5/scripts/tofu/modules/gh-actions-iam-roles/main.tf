@@ -110,7 +110,9 @@ data "aws_iam_policy_document" "plan_serverless_app" {
     effect = "Allow"
     actions = [
       "iam:List*Role*",
-      "iam:Get*Role*"
+      "iam:Get*Role*",
+      "iam:PutRolePolicy",
+      "iam:AttachRolePolicy"
     ]
     resources = ["arn:aws:iam::*:role/${var.lambda_base_name}*"]
   }
@@ -185,7 +187,9 @@ data "aws_iam_policy_document" "apply_serverless_app" {
       "iam:UpdateRole",
       "iam:PassRole",
       "iam:List*Role*",
-      "iam:Get*Role*"
+      "iam:Get*Role*",
+      "iam:PutRolePolicy",
+      "iam:AttachRolePolicy"
     ]
     resources = ["arn:aws:iam::*:role/${var.lambda_base_name}*"]
   }
