@@ -25,23 +25,26 @@ jobs:
       - name: Extract changed OpenTofu folders
         id: set-folders
         run: |
-          FOLDERS=$(echo "${{ steps.detect.outputs.all_changed_files }}" \
-            | tr ' ' '\n' \
-            | grep '^td5/scripts/tofu/live/' \
-            | awk -F/ '{print $1"/"$2"/"$3"/"$4}' \
-            | sort -u \
-            | tr '\n' ',' \
-            | sed 's/,$//')
-          echo "folders=[\"$(echo $FOLDERS | sed 's/,/","/g')\"]" >> $GITHUB_OUTPUT
+          FOLDERS=""
+          for file in ${{ steps.detect.outputs.all_changed_files }}; do
+            DIR=$(dirname "$file")
+            if ls "$DIR"/*.tf 1> /dev/null 2>&1; then
+              FOLDERS="$FOLDERS,$DIR"
+            fi
+          done
+          FOLDERS=${FOLDERS#,}
+          JSON_FOLDERS="[\"$(echo $FOLDERS | sed 's/,/","/g')\"]"
+          echo "folders=$JSON_FOLDERS" >> $GITHUB_OUTPUT
 
   run_tofu:
     name: Run Tofu Plan & Apply
     needs: detect_changes
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: write                                                  
-      id-token: write
+      id-token: write  
       contents: read
+      pull-requests: write 
+    if: ${{ needs.detect_changes.outputs.folders != '[]' }} 
     strategy:
       matrix:
         folder: ${{ fromJson(needs.detect_changes.outputs.folders) }}
@@ -62,6 +65,7 @@ jobs:
       - name: Tofu Plan
         working-directory: ${{ matrix.folder }}
         run: |
+          echo "Running plan in ${{ matrix.folder }}"
           tofu init -no-color -input=false
           tofu plan -no-color -input=false -lock=false
 
@@ -75,5 +79,6 @@ jobs:
       - name: Tofu Apply
         working-directory: ${{ matrix.folder }}
         run: |
+          echo "Running apply in ${{ matrix.folder }}"
           tofu init -no-color -input=false
           tofu apply -no-color -input=false -lock-timeout=60m -auto-approve
